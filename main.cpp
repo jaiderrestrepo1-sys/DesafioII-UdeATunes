@@ -178,6 +178,33 @@ public:
     bool quitarPorNombre(const string &nombre) {
         for (int i = 0; i < total; ++i) {
             if (canciones[i]->getNombre() == nombre) {
+                for (int j = i; j < total - 1; ++j) canciones[j] = canciones[j + 1];
+                --total;
+                cout << " Quitada de favoritos: " << nombre << endl;
+                return true;
+            }
+        }
+        cout << " No se encontro la cancion en favoritos." << endl;
+        return false;
+    }
+
+    
+    void añadirLista(ListaFavoritos &otro) {
+        for (int i = 0; i < otro.total && total < MAX_FAVORITES; ++i) {
+            if (!existePorPtr(otro.canciones[i])) canciones[total++] = otro.canciones[i];
+        }
+        cout << " Se agregaron canciones de la lista seguida (si las hay)." << endl;
+    }
+
+    void mostrar() const {
+        if (total == 0) {
+            cout << "No hay canciones en favoritos." << endl;
+            return;
+        }
+        cout << "\n Lista de Favoritos" << endl;
+        for (int i = 0; i < total; ++i) cout << i + 1 << ". " << canciones[i]->getNombre() << " (id: " << canciones[i]->getId() << ")" << endl;
+    }
+};
                 
 
 
