@@ -131,3 +131,34 @@ public:
     string getNick() const { return nickname; }
     string getContra() const { return contrasena; }
     string getTipo() const { return tipo; }
+ void mostrarDatos() const {
+        cout << "\nUsuario: " << nickname
+             << "\nPais: " << pais
+             << "\nCiudad: " << ciudad
+             << "\nTipo: " << tipo
+             << "\nRegistro: " << fechaRegistro << endl;
+    }
+
+    string getLineaArchivo() const {
+        return nickname + "," + tipo + "," + ciudad + "," + pais + "," + contrasena + "," + fechaRegistro;
+    }
+};
+
+// CLASE LISTA FAVORITOS:
+class ListaFavoritos {
+private:
+    Cancion* canciones[MAX_FAVORITES];
+    int total;
+public:
+    ListaFavoritos() : total(0) {}
+
+    bool existePorPtr(Cancion* c) const {
+        for (int i = 0; i < total; ++i) if (canciones[i] == c) return true;
+        return false;
+    }
+
+    bool existePorId(const string &id) const {
+        for (int i = 0; i < total; ++i) if (canciones[i]->getId() == id) return true;
+        return false;
+    }
+
