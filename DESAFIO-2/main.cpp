@@ -7,6 +7,7 @@
 #include <chrono>
 using namespace std;
 
+// CONFIGURACION:
 const int MAX_SONGS = 50;
 const int MAX_ADS = 50;
 const int MAX_USERS = 50;
@@ -324,3 +325,12 @@ public:
              << "\nMemoria aproximada usada por reproductor y arreglos: " << memoriaEstim << " bytes\n";
     }
 };
+
+// FUNCIONES ARCHIVO usuario.txt
+void guardarUsuarioArchivo(Usuario* u) {
+    ofstream archivo("usuarios.txt", ios::app);
+    if (archivo.is_open()) {
+        archivo << u->getLineaArchivo() << endl;
+        archivo.close();
+    }
+}
