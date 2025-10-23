@@ -161,4 +161,23 @@ public:
         for (int i = 0; i < total; ++i) if (canciones[i]->getId() == id) return true;
         return false;
     }
+    bool agregar(Cancion* c) {
+        if (c == nullptr) return false;
+        if (total >= MAX_FAVORITES) {
+            cout << " Lista de favoritos llena." << endl;
+            return false;
+        }
+        if (existePorPtr(c)) {
+            cout << " La cancion ya esta en favoritos." << endl;
+            return false;
+        }
+        canciones[total++] = c;
+        cout << " Agregada a favoritos: " << c->getNombre() << endl;
+        return true;
+    }
+    bool quitarPorNombre(const string &nombre) {
+        for (int i = 0; i < total; ++i) {
+            if (canciones[i]->getNombre() == nombre) {
+                
+
 
