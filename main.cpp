@@ -186,9 +186,7 @@ public:
         }
         cout << " No se encontro la cancion en favoritos." << endl;
         return false;
-    }
-
-    
+    }  
     void añadirLista(ListaFavoritos &otro) {
         for (int i = 0; i < otro.total && total < MAX_FAVORITES; ++i) {
             if (!existePorPtr(otro.canciones[i])) canciones[total++] = otro.canciones[i];
@@ -214,6 +212,7 @@ public:
         : Usuario(_nick, "Premium", _ciudad, _pais, _contra) {}
     ListaFavoritos& getFavoritos() { return favoritos; }
 };
+
 // CLASE REPRODUCTOR:
 class Reproductor {
 private:
@@ -248,19 +247,15 @@ Cancion* getCancionByIndex(int i) {
         return nullptr;
     }
 
-
     void reproducir(Usuario* u) {
         if (totalC == 0) {
             cout << "No hay canciones cargadas." << endl;
             return;
         }
-
         int calidad = (u->getTipo() == "Premium") ? 320 : 128;
         int contadorAnuncios = 0;
         int ultimoAnuncio = -1;
         int iteraciones = 0;
-
-        
         int pesos[MAX_ADS * 3]; 
         int pesosCount = 0;
         for (int i = 0; i < totalP; ++i) {
@@ -294,6 +289,34 @@ Cancion* getCancionByIndex(int i) {
                     ultimoAnuncio = adv;
                     anuncios[adv]->mostrar();
                 }
-
-
+this_thread::sleep_for(chrono::seconds(3));//1
+                if (!repetir) currentPos = rand() % totalC;
+            } else {
+                int control = 0;
+                cout << "\n--- Controles (Premium) ---\n1. Pausar (2s)\n2. Siguiente\n3. Anterior\n4. Alternar Repetir actual\n5. Detener\nSeleccione: ";
+                cin >> control;
+                iteraciones++;
+                if (control == 1) { cout << " Pausado 2 segundos...\n"; this_thread::sleep_for(chrono::seconds(2)); }
+                else if (control == 2) {
+                    if (!repetir) currentPos = (currentPos + 1) % totalC;
+                }
+                else if (control == 3) {
+                    if (historyCount > 1) {
+                        int prevIndex = (historyCount >= 2) ? history[historyCount - 2] : history[0];
+                        currentPos = prevIndex;
+                    } else {
+                        cout << "No hay cancion previa disponible." << endl;
+                    }
+                }
+                else if (control == 4) {
+                    repetir = !repetir;
+                    cout << (repetir ? "Repetir activado\n" : "Repetir desactivado\n");
+                }
+                else if (control == 5) {
+                    cout << "Deteniendo reproducción...\n";
+                    break;
+                }
+        
+            }
+        }
 
