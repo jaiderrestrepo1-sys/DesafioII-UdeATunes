@@ -319,3 +319,8 @@ public:
 
             }
         }
+        size_t memoriaEstim = sizeof(*this) + (size_t)totalC * sizeof(Cancion*) + (size_t)totalP * sizeof(Publicidad*);
+        cout << "\n--- Métricas ---\nIteraciones realizadas (estimadas): " << iteraciones
+             << "\nMemoria aproximada usada por reproductor y arreglos: " << memoriaEstim << " bytes\n";
+    }
+};
