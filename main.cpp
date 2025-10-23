@@ -205,6 +205,39 @@ public:
         for (int i = 0; i < total; ++i) cout << i + 1 << ". " << canciones[i]->getNombre() << " (id: " << canciones[i]->getId() << ")" << endl;
     }
 };
-                
+// CLASE USUARIO PREMIUM:
+class UsuarioPremium : public Usuario {
+private:
+    ListaFavoritos favoritos;
+public:
+    UsuarioPremium(string _nick, string _ciudad, string _pais, string _contra)
+        : Usuario(_nick, "Premium", _ciudad, _pais, _contra) {}
+    ListaFavoritos& getFavoritos() { return favoritos; }
+};
+//CLASE REPRODUCTOR:
+class Reproductor {
+private:
+    Cancion* canciones[MAX_SONGS];
+    Publicidad* anuncios[MAX_ADS];
+    int totalC, totalP;
+public:
+    Reproductor() : totalC(0), totalP(0) {}
+
+    bool agregarCancion(Cancion* c) {
+        if (totalC >= MAX_SONGS) return false;
+        canciones[totalC++] = c;
+        return true;
+    }
+    bool agregarPublicidad(Publicidad* p) {
+        if (totalP >= MAX_ADS) return false;
+        anuncios[totalP++] = p;
+        return true;
+    }
+
+    void mostrarCanciones() const {
+        cout << "\n Canciones disponibles:" << endl;
+        for (int i = 0; i < totalC; ++i) cout << i + 1 << ". " << canciones[i]->getNombre() << " (id: " << canciones[i]->getId() << ")" << endl;
+    }
+
 
 
