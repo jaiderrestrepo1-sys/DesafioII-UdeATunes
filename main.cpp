@@ -275,5 +275,25 @@ Cancion* getCancionByIndex(int i) {
 
         bool repetir = false;
 
+        while (reproducidas < K_AUTOPLAY) {
+            canciones[currentPos]->mostrar(calidad);
+            iteraciones++;
+            reproducidas++;
+
+            if (historyCount < M_PREVIOUS) history[historyCount++] = currentPos;
+            else {
+                for (int h = 0; h < M_PREVIOUS - 1; ++h) history[h] = history[h + 1];
+                history[M_PREVIOUS - 1] = currentPos;
+            }
+
+            if (u->getTipo() != "Premium") {
+                contadorAnuncios++;
+                if (contadorAnuncios % 2 == 0 && pesosCount > 0) {
+                    int adv;
+                    do { adv = pesos[rand() % pesosCount]; iteraciones++; } while (adv == ultimoAnuncio && pesosCount > 1);
+                    ultimoAnuncio = adv;
+                    anuncios[adv]->mostrar();
+                }
+
 
 
