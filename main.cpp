@@ -214,7 +214,7 @@ public:
         : Usuario(_nick, "Premium", _ciudad, _pais, _contra) {}
     ListaFavoritos& getFavoritos() { return favoritos; }
 };
-//CLASE REPRODUCTOR:
+// CLASE REPRODUCTOR:
 class Reproductor {
 private:
     Cancion* canciones[MAX_SONGS];
@@ -238,6 +238,42 @@ public:
         cout << "\n Canciones disponibles:" << endl;
         for (int i = 0; i < totalC; ++i) cout << i + 1 << ". " << canciones[i]->getNombre() << " (id: " << canciones[i]->getId() << ")" << endl;
     }
+Cancion* getCancionByIndex(int i) {
+        if (i >= 0 && i < totalC) return canciones[i];
+        return nullptr;
+    }
+
+    Cancion* getCancionById(const string &id) {
+        for (int i = 0; i < totalC; ++i) if (canciones[i]->getId() == id) return canciones[i];
+        return nullptr;
+    }
+
+
+    void reproducir(Usuario* u) {
+        if (totalC == 0) {
+            cout << "No hay canciones cargadas." << endl;
+            return;
+        }
+
+        int calidad = (u->getTipo() == "Premium") ? 320 : 128;
+        int contadorAnuncios = 0;
+        int ultimoAnuncio = -1;
+        int iteraciones = 0;
+
+        
+        int pesos[MAX_ADS * 3]; 
+        int pesosCount = 0;
+        for (int i = 0; i < totalP; ++i) {
+            int w = anuncios[i]->getPeso();
+            for (int k = 0; k < w; ++k) pesos[pesosCount++] = i;
+        }
+
+        int reproducidas = 0;
+        int currentPos = rand() % totalC;
+        int history[M_PREVIOUS + 1];
+        int historyCount = 0;
+
+        bool repetir = false;
 
 
 
