@@ -93,4 +93,41 @@ public:
     bool equalsId(const string &otherId) const { return id == otherId; }
 };
 
+// CLASE ALBUM:
+class Publicidad {
+private:
+    string texto;
+    string categoria; 
+public:
+    Publicidad() {}
+    Publicidad(string _texto, string _categoria) : texto(_texto), categoria(_categoria) {}
+    void mostrar() {
+        cout << "\n--- PUBLICIDAD ---" << endl;
+        cout << texto << " (categoria " << categoria << ")" << endl;
+        cout << "--------------------" << endl;
+    }
+    string getCategoria() const { return categoria; }
+    int getPeso() const {
+        if (categoria == "AAA") return 3;
+        if (categoria == "B") return 2;
+        return 1; 
+    }
+};
 
+// CLASE USUARIO:
+class Usuario {
+protected:
+    string nickname, tipo, ciudad, pais, contrasena, fechaRegistro;
+public:
+    virtual ~Usuario() {}
+    Usuario() {}
+    Usuario(string _nick, string _tipo, string _ciudad, string _pais, string _contra)
+        : nickname(_nick), tipo(_tipo), ciudad(_ciudad), pais(_pais), contrasena(_contra) {
+        time_t t = time(0);
+        fechaRegistro = ctime(&t);
+        if (!fechaRegistro.empty() && fechaRegistro.back() == '\n') fechaRegistro.pop_back();
+    }
+
+    string getNick() const { return nickname; }
+    string getContra() const { return contrasena; }
+    string getTipo() const { return tipo; }
