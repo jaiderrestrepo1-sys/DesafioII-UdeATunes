@@ -3,8 +3,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <fstream>
-#include <thread>
-#include <chrono>
+
 using namespace std;
 
 // CONFIGURACION:
@@ -94,7 +93,7 @@ public:
     bool equalsId(const string &otherId) const { return id == otherId; }
 };
 
-// CLASE ALBUM:
+// CLASE PUBLICIDAD:
 class Publicidad {
 private:
     string texto;
@@ -214,7 +213,7 @@ public:
     ListaFavoritos& getFavoritos() { return favoritos; }
 };
 
-// CLASE REPRODUCTOR:
+// CLASE REPRODUCTOR
 class Reproductor {
 private:
     Cancion* canciones[MAX_SONGS];
@@ -235,40 +234,33 @@ public:
     }
 
     void mostrarCanciones() const {
-        cout << "\n Canciones disponibles:" << endl;
-        for (int i = 0; i < totalC; ++i) cout << i + 1 << ". " << canciones[i]->getNombre() << " (id: " << canciones[i]->getId() << ")" << endl;
-    }
-    Cancion* getCancionByIndex(int i) {
-        if (i >= 0 && i < totalC) return canciones[i];
-        return nullptr;
+        cout << "\n🎵 Canciones disponibles:" << endl;
+        for (int i = 0; i < totalC; ++i)
+            cout << i + 1 << ". " << canciones[i]->getNombre()
+                 << " (id: " << canciones[i]->getId() << ")" << endl;
     }
 
     Cancion* getCancionById(const string &id) {
-        for (int i = 0; i < totalC; ++i) if (canciones[i]->getId() == id) return canciones[i];
+        for (int i = 0; i < totalC; ++i)
+            if (canciones[i]->getId() == id) return canciones[i];
         return nullptr;
     }
 
     void reproducir(Usuario* u) {
-        if (totalC == 0) {
-            cout << "No hay canciones cargadas." << endl;
-            return;
-        }
+        if (totalC == 0) { cout << "No hay canciones cargadas." << endl; return; }
+
         int calidad = (u->getTipo() == "Premium") ? 320 : 128;
-        int contadorAnuncios = 0;
-        int ultimoAnuncio = -1;
-        int iteraciones = 0;
-        int pesos[MAX_ADS * 3];
-        int pesosCount = 0;
-        for (int i = 0; i < totalP; ++i) {
-            int w = anuncios[i]->getPeso();
-            for (int k = 0; k < w; ++k) pesos[pesosCount++] = i;
-        }
+        int contadorAnuncios = 0, ultimoAnuncio = -1, iteraciones = 0;
+        int pesos[MAX_ADS * 3], pesosCount = 0;
+
+        for (int i = 0; i < totalP; ++i)
+            for (int k = 0; k < anuncios[i]->getPeso(); ++k)
+                pesos[pesosCount++] = i;
 
         int reproducidas = 0;
         int currentPos = rand() % totalC;
         int history[M_PREVIOUS + 1];
         int historyCount = 0;
-
         bool repetir = false;
 
         while (reproducidas < K_AUTOPLAY) {
@@ -276,61 +268,70 @@ public:
             iteraciones++;
             reproducidas++;
 
-            if (historyCount < M_PREVIOUS) history[historyCount++] = currentPos;
-            else {
-                for (int h = 0; h < M_PREVIOUS - 1; ++h) history[h] = history[h + 1];
-                history[M_PREVIOUS - 1] = currentPos;
-            }
-
             if (u->getTipo() != "Premium") {
                 contadorAnuncios++;
                 if (contadorAnuncios % 2 == 0 && pesosCount > 0) {
                     int adv;
-                    do { adv = pesos[rand() % pesosCount]; iteraciones++; } while (adv == ultimoAnuncio && pesosCount > 1);
+                    do { adv = pesos[rand() % pesosCount]; iteraciones++; }
+                    while (adv == ultimoAnuncio && pesosCount > 1);
                     ultimoAnuncio = adv;
                     anuncios[adv]->mostrar();
                 }
-                this_thread::sleep_for(chrono::seconds(3));//1
+                pausaManual(3); // reemplazo del sleep
                 if (!repetir) currentPos = rand() % totalC;
             } else {
                 int control = 0;
-                cout << "\n--- Controles (Premium) ---\n1. Pausar (2s)\n2. Siguiente\n3. Anterior\n4. Alternar Repetir actual\n5. Detener\nSeleccione: ";
+                cout << "\n--- Controles (Premium) ---\n1. Pausar\n2. Siguiente\n3. Anterior\n4. Alternar Repetir\n5. Detener\nSeleccione: ";
                 cin >> control;
                 iteraciones++;
-                if (control == 1) { cout << " Pausado 2 segundos...\n"; this_thread::sleep_for(chrono::seconds(2)); }
-                else if (control == 2) {
-                    if (!repetir) currentPos = (currentPos + 1) % totalC;
-                }
-                else if (control == 3) {
-                    if (historyCount > 1) {
-                        int prevIndex = (historyCount >= 2) ? history[historyCount - 2] : history[0];
-                        currentPos = prevIndex;
-                    } else {
-                        cout << "No hay cancion previa disponible." << endl;
-                    }
-                }
+                if (control == 1) {
+                    cout << " Pausado...\n";
+                    pausaManual(2);
+                } else if (control == 2 && !repetir)
+                    currentPos = (currentPos + 1) % totalC;
+                else if (control == 3 && historyCount > 1)
+                    currentPos = history[historyCount - 2];
                 else if (control == 4) {
                     repetir = !repetir;
                     cout << (repetir ? "Repetir activado\n" : "Repetir desactivado\n");
-                }
-                else if (control == 5) {
-                    cout << "Deteniendo reproducción...\n";
-                    break;
-                }
-
+                } else if (control == 5) break;
             }
         }
-        size_t memoriaEstim = sizeof(*this) + (size_t)totalC * sizeof(Cancion*) + (size_t)totalP * sizeof(Publicidad*);
-        cout << "\n--- Métricas ---\nIteraciones realizadas (estimadas): " << iteraciones
-             << "\nMemoria aproximada usada por reproductor y arreglos: " << memoriaEstim << " bytes\n";
+
+        cout << "\n--- Métricas ---\nIteraciones estimadas: " << iteraciones
+             << "\nMemoria usada: " << (sizeof(*this) + totalC * sizeof(Cancion*) + totalP * sizeof(Publicidad*)) << " bytes\n";
     }
 };
-
-// FUNCIONES ARCHIVO usuario.txt
+// FUNCIONES ARCHIVO "usuario.txt":
 void guardarUsuarioArchivo(Usuario* u) {
     ofstream archivo("usuarios.txt", ios::app);
     if (archivo.is_open()) {
         archivo << u->getLineaArchivo() << endl;
         archivo.close();
     }
+}
+
+int cargarUsuarios(Usuario* usuarios[], int& totalUsuarios) {
+    ifstream archivo("usuarios.txt");
+    if (!archivo.is_open()) return 0;
+    string linea;
+    while (getline(archivo, linea)) {
+        string datos[6];
+        size_t pos = 0;
+        for (int i = 0; i < 5; ++i) {
+            pos = linea.find(",");
+            if (pos != string::npos) {
+                datos[i] = linea.substr(0, pos);
+                linea.erase(0, pos + 1);
+            } else datos[i] = "";
+        }
+        datos[5] = linea;
+        if (datos[1] == "Premium")
+            usuarios[totalUsuarios++] = new UsuarioPremium(datos[0], datos[2], datos[3], datos[4]);
+        else
+            usuarios[totalUsuarios++] = new Usuario(datos[0], "Estandar", datos[2], datos[3], datos[4]);
+        if (totalUsuarios >= MAX_USERS) break;
+    }
+    archivo.close();
+    return totalUsuarios;
 }
