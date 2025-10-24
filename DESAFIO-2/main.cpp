@@ -366,3 +366,54 @@ int main() {
     cargarUsuarios(usuarios, totalUsuarios);
 
     int opcion;
+    do {
+        cout << "\n===== UdeATunes MENU ====="
+                "\n1. Registrarse"
+                "\n2. Iniciar sesion"
+                "\n3. Salir"
+                "\nSeleccione: ";
+        cin >> opcion;
+
+        if (opcion == 1) {
+            string nick, tipo, ciudad, pais, contra;
+            cout <<"\n Registrate";
+            cout <<"\npara empezar";
+            cout <<"\n a escuchar";
+            cout <<"\n contenido\n";
+            cout << "\nNombre de Usuario: "; cin >> nick;
+            bool dup = false;
+            for (int i = 0; i < totalUsuarios; ++i)
+                if (usuarios[i]->getNick() == nick) { dup = true; break; }
+            if (dup) { cout << "Nombre de Usuario ya existe.\n"; continue; }
+
+            cout << "Tipo (Estandar/Premium): "; cin >> tipo;
+            cout << "Ciudad: "; cin >> ciudad;
+            cout << "Pais: "; cin >> pais;
+            cout << "Contrasena: "; cin >> contra;
+
+            Usuario* nuevo;
+            if (tipo == "Premium" || tipo == "premium")
+                nuevo = new UsuarioPremium(nick, ciudad, pais, contra);
+            else
+                nuevo = new Usuario(nick, "Estandar", ciudad, pais, contra);
+
+            usuarios[totalUsuarios++] = nuevo;
+            guardarUsuarioArchivo(nuevo);
+            cout << "Usuario registrado correctamente.";
+            cout << "----¡Bienvenido a UdeATunes!-----.\n";
+        }
+        else if (opcion == 2) {
+            string user, pass;
+            cout <<"\n    Hola de";
+            cout <<"\n    nuevo!!\n";
+            cout << "\nNombre de Usuario: "; cin >> user;
+            cout << "Contrasena: "; cin >> pass;
+
+            bool encontrado = false;
+            for (int i = 0; i < totalUsuarios; ++i) {
+                if (usuarios[i]->getNick() == user && usuarios[i]->getContra() == pass) {
+                    encontrado = true;
+                    cout << "\nBienvenido, " << user << " (" << usuarios[i]->getTipo() << ")\n";
+
+                    if (usuarios[i]->getTipo() == "Estandar") {
+                        int op2;
