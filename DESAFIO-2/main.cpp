@@ -277,7 +277,7 @@ public:
                     ultimoAnuncio = adv;
                     anuncios[adv]->mostrar();
                 }
-                pausaManual(3); // reemplazo del sleep
+                pausaManual(3);
                 if (!repetir) currentPos = rand() % totalC;
             } else {
                 int control = 0;
@@ -335,3 +335,34 @@ int cargarUsuarios(Usuario* usuarios[], int& totalUsuarios) {
     archivo.close();
     return totalUsuarios;
 }
+
+// MAIN:
+int main() {
+    srand((unsigned)time(NULL));
+    Reproductor r;
+
+    Artista a1("Claudia Lorelle", 29, "Colombia", 200000, 3);
+    Album alb1("Lugar Secreto", "LS01", "Sony Music",
+               "/users/storage/claudia lorelle/image/lugar secreto.png", "2023-08-15", 9);
+
+    Cancion c1("A tu lado", "100010101", 180,
+               "audio/a_tu_lado_128.ogg", "audio/a_tu_lado_320.ogg", a1, alb1);
+    c1.agregarCredito(Credito("Juan", "Mejía", "PROD1234567", "Productor"));
+    c1.agregarCredito(Credito("Laura", "Gómez", "Músico", "MUS2345678"));
+    c1.agregarCredito(Credito("Andrés", "Díaz", "COMP3456789", "Compositor"));
+
+    Cancion c2("Sueños", "100010102", 200,
+               "audio/suenos_128.ogg", "audio/suenos_320.ogg", a1, alb1);
+    c2.agregarCredito(Credito("María", "Ríos", "PROD8765432", "Productor"));
+
+    r.agregarCancion(&c1);
+    r.agregarCancion(&c2);
+    r.agregarPublicidad(new Publicidad("Compra el nuevo álbum de DJ UdeA!", "AAA"));
+    r.agregarPublicidad(new Publicidad("Hazte Premium y evita anuncios.", "B"));
+    r.agregarPublicidad(new Publicidad("Descubre nuevos artistas cada semana.", "C"));
+
+    Usuario* usuarios[MAX_USERS];
+    int totalUsuarios = 0;
+    cargarUsuarios(usuarios, totalUsuarios);
+
+    int opcion;
