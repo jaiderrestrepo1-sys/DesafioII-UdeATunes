@@ -453,3 +453,28 @@ int main() {
                             if (op2 == 1) r.reproducir(usuarios[i]);
                             else if (op2 == 2) usuarios[i]->mostrarDatos();
                         } while (op2 != 3);
+                    } else {
+                        UsuarioPremium* up = dynamic_cast<UsuarioPremium*>(usuarios[i]);
+                        int op3;
+                        do {
+                            cout << "\nRecuerda que tienes un pago pendiente por:"
+                                    "\n$19900 pesos mensuales\n";
+                            cout << "\n--------- MENU PREMIUM ---------"
+                                    "\n1. Reproducir"
+                                    "\n2. Biblioteca"
+                                    "\n3. Agregar favorito (por id)"
+                                    "\n4. Seguir favoritos de otro premium"
+                                    "\n5. Quitar favorito (por nombre)"
+                                    "\n6. Salir"
+                                    "\nSeleccione: ";
+                            cin >> op3;
+                            if (op3 == 1) r.reproducir(usuarios[i]);
+                            else if (op3 == 2) up->getFavoritos().mostrar();
+                            else if (op3 == 3) {
+                                string id; r.mostrarCanciones();
+                                cout << "Ingrese id de la canción: "; cin >> id;
+                                Cancion* c = r.getCancionById(id);
+                                if (c) up->getFavoritos().agregar(c);
+                                else cout << "No existe canción con ese id.\n";
+                            }
+                            else if (op3 == 4) {
