@@ -341,22 +341,47 @@ int main() {
     srand((unsigned)time(NULL));
     Reproductor r;
 
-    Artista a1("Claudia Lorelle", 29, "Colombia", 200000, 3);
-    Album alb1("Lugar Secreto", "LS01", "Sony Music",
-               "/users/storage/claudia lorelle/image/lugar secreto.png", "2023-08-15", 9);
+    // ARTISTA 1:
+    Artista a1("Blessd", 25, "Colombia", 5000000, 2);
+    Album alb1("BlessDeluxury", "BDL01", "JM World Music",
+               "/users/storage/blessd/image/blessdeluxury.png", "2025-10-01", 2);
 
-    Cancion c1("A tu lado", "100010101", 180,
-               "audio/a_tu_lado_128.ogg", "audio/a_tu_lado_320.ogg", a1, alb1);
-    c1.agregarCredito(Credito("Juan", "Mejía", "PROD1234567", "Productor"));
-    c1.agregarCredito(Credito("Laura", "Gómez", "Músico", "MUS2345678"));
-    c1.agregarCredito(Credito("Andrés", "Díaz", "COMP3456789", "Compositor"));
+    Cancion c1("Yogurcito", "300030301", 180,
+               "audio/yogurcito_128.ogg", "audio/yogurcito_320.ogg", a1, alb1);
+    c1.agregarCredito(Credito("Pedro", "Gonzalez", "PROD9012345", "Productor"));
+    c1.agregarCredito(Credito("Ana", "Martinez", "MUS5678901", "Musico"));
+    c1.agregarCredito(Credito("Carlos", "Ramirez", "COMP2345678", "Compositor"));
 
-    Cancion c2("Sueños", "100010102", 200,
-               "audio/suenos_128.ogg", "audio/suenos_320.ogg", a1, alb1);
-    c2.agregarCredito(Credito("María", "Ríos", "PROD8765432", "Productor"));
+    Cancion c2("Magia", "300030302", 200,
+               "audio/magia_128.ogg", "audio/magia_320.ogg", a1, alb1);
+    c2.agregarCredito(Credito("Lucia", "Diaz", "PROD3456789", "Productora"));
+    c2.agregarCredito(Credito("Javier", "Soto", "MUS6789012", "Musico"));
+    c2.agregarCredito(Credito("Marina", "Vargas", "COMP3456789", "Compositor"));
 
     r.agregarCancion(&c1);
     r.agregarCancion(&c2);
+
+    // ARTISTA 2:
+    Artista a2("Juanes", 53, "Colombia", 16000000, 10);
+    Album alb2("Mi Sangre", "MS02", "Universal Music",
+               "/users/storage/juanes/image/misangre.png", "2004-09-28", 2);
+
+    Cancion c3("La Camisa Negra", "400040401", 210,
+               "audio/la_camisa_negra_128.ogg", "audio/la_camisa_negra_320.ogg", a2, alb2);
+    c3.agregarCredito(Credito("Juan", "Esteban Aristizabal", "PROD1111222", "Productor"));
+    c3.agregarCredito(Credito("Octavio", "Mesa", "COMP3333444", "Compositor"));
+    c3.agregarCredito(Credito("Andres", "Tovar", "MUS5555666", "Musico"));
+
+    Cancion c4("Amame", "400040402", 195,
+               "audio/amame_128.ogg", "audio/amame_320.ogg", a2, alb2);
+    c4.agregarCredito(Credito("Karen", "Martinez", "PROD7777888", "Productora"));
+    c4.agregarCredito(Credito("Diego", "Toro", "COMP9999000", "Compositor"));
+    c4.agregarCredito(Credito("Paola", "Gómez", "MUS1122334", "Musico"));
+
+    r.agregarCancion(&c3);
+    r.agregarCancion(&c4);
+
+    // PUBLICIDAD:
     r.agregarPublicidad(new Publicidad("Compra el nuevo álbum de DJ UdeA!", "AAA"));
     r.agregarPublicidad(new Publicidad("Hazte Premium y evita anuncios.", "B"));
     r.agregarPublicidad(new Publicidad("Descubre nuevos artistas cada semana.", "C"));
@@ -367,19 +392,19 @@ int main() {
 
     int opcion;
     do {
-        cout << "\n===== UdeATunes MENU ====="
-                "\n1. Registrarse"
-                "\n2. Iniciar sesion"
+        cout << "\n========= UdeATunes ============"
+                "\n1. Registrate | 2.Iniciar sesion"
                 "\n3. Salir"
                 "\nSeleccione: ";
         cin >> opcion;
+        cout << "\n--------------------------------";
 
         if (opcion == 1) {
             string nick, tipo, ciudad, pais, contra;
-            cout <<"\n Registrate";
-            cout <<"\npara empezar";
-            cout <<"\n a escuchar";
-            cout <<"\n contenido\n";
+            cout <<"\n       Registrate ";
+            cout <<"\n      para empezar ";
+            cout <<"\n       a escuchar ";
+            cout <<"\n       contenido\n ";
             cout << "\nNombre de Usuario: "; cin >> nick;
             bool dup = false;
             for (int i = 0; i < totalUsuarios; ++i)
