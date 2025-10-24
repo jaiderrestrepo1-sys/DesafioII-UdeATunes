@@ -3,6 +3,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <fstream>
+#include <chrono>
 
 using namespace std;
 
@@ -13,6 +14,14 @@ const int MAX_USERS = 50;
 const int MAX_FAVORITES = 10000;
 const int M_PREVIOUS = 6;
 const int K_AUTOPLAY = 5;
+
+
+//CHRONO:
+void pausaManual(int segundos) {
+    auto inicio = chrono::steady_clock::now();
+    while (chrono::duration_cast<chrono::seconds>(chrono::steady_clock::now() - inicio).count() < segundos) {
+    }
+}
 
 // CLASE CREDITO:
 class Credito {
@@ -337,6 +346,7 @@ int cargarUsuarios(Usuario* usuarios[], int& totalUsuarios) {
     return totalUsuarios;
 }
 
+
 // MAIN:
 int main() {
     srand((unsigned)time(NULL));
@@ -426,7 +436,7 @@ int main() {
             usuarios[totalUsuarios++] = nuevo;
             guardarUsuarioArchivo(nuevo);
             cout << "Usuario registrado correctamente.";
-            cout << "----¡Bienvenido a UdeATunes!-----.\n";
+            cout << "\n----Bienvenido a UdeATunes!!-----.\n";
         }
         else if (opcion == 2) {
             string user, pass;
@@ -478,3 +488,33 @@ int main() {
                                 else cout << "No existe canción con ese id.\n";
                             }
                             else if (op3 == 4) {
+                                string target;
+                                cout << "Nombre de Usuario premium a seguir: "; cin >> target;
+                                bool found = false;
+                                for (int u2 = 0; u2 < totalUsuarios; ++u2) {
+                                    UsuarioPremium* otro = dynamic_cast<UsuarioPremium*>(usuarios[u2]);
+                                    if (otro && usuarios[u2]->getNick() == target) {
+                                        up->getFavoritos().añadirLista(otro->getFavoritos());
+                                        found = true; break;
+                                    }
+                                }
+                                if (!found) cout << "No se encontró ese usuario premium.\n";
+                            }
+                            else if (op3 == 5) {
+                                string nombre;
+                                cout << "Nombre de la canción a quitar: ";
+                                cin.ignore(); getline(cin, nombre);
+                                up->getFavoritos().quitarPorNombre(nombre);
+                            }
+                        } while (op3 != 6);
+                    }
+                    break;
+                }
+            }
+            if (!encontrado) cout << "Usuario o contraseña incorrectos.\n";
+        }
+    }while (opcion != 3);
+
+    cout << "\nGracias por usar UdeATunes.\n";
+    return 0;
+}
