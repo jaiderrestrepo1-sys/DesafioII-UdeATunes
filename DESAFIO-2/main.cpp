@@ -79,14 +79,15 @@ public:
     void mostrar(int calidad) {
         reproducciones++;
         cout << "\n--------------------------------------------------" << endl;
-        cout << "Cantante: " << artista.nombre << endl;
-        cout << "Album: " << album.nombre << endl;
-        cout << "Ruta a la portada: " << album.portada << endl;
-        cout << "Titulo: " << nombre << endl;
+        cout << "          Cantante: " << artista.nombre << endl;
+        cout << "           Album: " << album.nombre << endl;
+        cout << "     Ruta a la portada del album: \n" << album.portada << endl;
+        cout << "Titulo de la cancion reproducida:" << nombre << endl;
         cout << "Ruta al archivo de audio: " << ((calidad == 128) ? ruta128 : ruta320) << endl;
-        cout << "Duracion: " << duracion << " segundos" << endl;
+        cout << "         Duracion: " << duracion << " segundos" << endl;
         cout << "\n--- Creditos ---" << endl;
-        for (int i = 0; i < totalCreditos; ++i) creditos[i].mostrar();
+        for (int i = 0; i < totalCreditos; ++i)
+            creditos[i].mostrar();
         cout << "--------------------------------------------------" << endl;
     }
 
@@ -298,7 +299,7 @@ public:
             }
         }
 
-        cout << "\n--- Métricas ---\nIteraciones estimadas: " << iteraciones
+        cout << "\n--- Metricas ---\nIteraciones estimadas: " << iteraciones
              << "\nMemoria usada: " << (sizeof(*this) + totalC * sizeof(Cancion*) + totalP * sizeof(Publicidad*)) << " bytes\n";
     }
 };
@@ -376,7 +377,7 @@ int main() {
                "audio/amame_128.ogg", "audio/amame_320.ogg", a2, alb2);
     c4.agregarCredito(Credito("Karen", "Martinez", "PROD7777888", "Productora"));
     c4.agregarCredito(Credito("Diego", "Toro", "COMP9999000", "Compositor"));
-    c4.agregarCredito(Credito("Paola", "Gómez", "MUS1122334", "Musico"));
+    c4.agregarCredito(Credito("Paola", "Gomez", "MUS1122334", "Musico"));
 
     r.agregarCancion(&c3);
     r.agregarCancion(&c4);
@@ -429,8 +430,8 @@ int main() {
         }
         else if (opcion == 2) {
             string user, pass;
-            cout <<"\n    Hola de";
-            cout <<"\n    nuevo!!\n";
+            cout <<"\n            Hola de ";
+            cout <<"\n            nuevo!!\n ";
             cout << "\nNombre de Usuario: "; cin >> user;
             cout << "Contrasena: "; cin >> pass;
 
@@ -442,3 +443,13 @@ int main() {
 
                     if (usuarios[i]->getTipo() == "Estandar") {
                         int op2;
+                        do {
+                            cout << "\n-------- MENU ESTANDAR ---------"
+                                    "\n1. Reproducir"
+                                    "\n2. Ver datos"
+                                    "\n3. Salir"
+                                    "\nSeleccione: ";
+                            cin >> op2;
+                            if (op2 == 1) r.reproducir(usuarios[i]);
+                            else if (op2 == 2) usuarios[i]->mostrarDatos();
+                        } while (op2 != 3);
