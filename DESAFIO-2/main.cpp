@@ -475,17 +475,18 @@ int main() {
                                     "\n3. Agregar favorito (por id)"
                                     "\n4. Seguir favoritos de otro premium"
                                     "\n5. Quitar favorito (por nombre)"
-                                    "\n6. Salir"
+                                    "\n6. Ver datos"
+                                    "\n7. Salir"
                                     "\nSeleccione: ";
                             cin >> op3;
                             if (op3 == 1) r.reproducir(usuarios[i]);
                             else if (op3 == 2) up->getFavoritos().mostrar();
                             else if (op3 == 3) {
                                 string id; r.mostrarCanciones();
-                                cout << "Ingrese id de la canción: "; cin >> id;
+                                cout << "Ingrese id de la cancion: "; cin >> id;
                                 Cancion* c = r.getCancionById(id);
                                 if (c) up->getFavoritos().agregar(c);
-                                else cout << "No existe canción con ese id.\n";
+                                else cout << "No existe cancion con ese id.\n";
                             }
                             else if (op3 == 4) {
                                 string target;
@@ -498,20 +499,21 @@ int main() {
                                         found = true; break;
                                     }
                                 }
-                                if (!found) cout << "No se encontró ese usuario premium.\n";
+                                if (!found) cout << "No se encontro ese usuario premium.\n";
                             }
                             else if (op3 == 5) {
                                 string nombre;
-                                cout << "Nombre de la canción a quitar: ";
+                                cout << "Nombre de la cancion a quitar: ";
                                 cin.ignore(); getline(cin, nombre);
                                 up->getFavoritos().quitarPorNombre(nombre);
                             }
-                        } while (op3 != 6);
+                            else if(op3 == 6) usuarios[i]->mostrarDatos();
+                        } while (op3 != 7);
                     }
                     break;
                 }
             }
-            if (!encontrado) cout << "Usuario o contraseña incorrectos.\n";
+            if (!encontrado) cout << "Usuario o contrasena incorrectos.\n";
         }
     }while (opcion != 3);
 
