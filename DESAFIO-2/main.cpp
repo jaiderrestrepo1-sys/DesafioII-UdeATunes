@@ -331,7 +331,7 @@ void reproducirFavoritos(UsuarioPremium* up, bool aleatorio) {
     int total = lista.getTotal();
 
     if (total == 0) {
-        cout << "Tu lista de favoritos está vacía.\n";
+        cout << "Tu lista de favoritos esta vacia.\n";
         return;
     }
 
@@ -375,11 +375,11 @@ void reproducirFavoritos(UsuarioPremium* up, bool aleatorio) {
             cout << (repetir ? "Repetir activado.\n" : "Repetir desactivado.\n");
         } else if (control == 4) break;
         else {
-            cout << "Opción inválida.\n";
+            cout << "Opcion invalida.\n";
         }
     }
 
-    cout << "\n--- Métricas ---"
+    cout << "\n--- Metricas ---"
          << "\nIteraciones: " << iteraciones
          << "\nMemoria usada: " << (sizeof(ListaFavoritos) + total * sizeof(Cancion*)) << " bytes\n";
 }
@@ -548,8 +548,9 @@ int main() {
                                     "\n3. Agregar favorito (por id)"
                                     "\n4. Seguir favoritos de otro premium"
                                     "\n5. Quitar favorito (por nombre)"
-                                    "\n6. Ver datos"
-                                    "\n7. Salir"
+                                    "\n6. Ejecutar mi lista de favoritos"
+                                    "\n7. Ver datos"
+                                    "\n8. Salir"
                                     "\nSeleccione: ";
                             cin >> op3;
                             if (op3 == 1) r.reproducir(usuarios[i]);
@@ -580,8 +581,14 @@ int main() {
                                 cin.ignore(); getline(cin, nombre);
                                 up->getFavoritos().quitarPorNombre(nombre);
                             }
-                            else if(op3 == 6) usuarios[i]->mostrarDatos();
-                        } while (op3 != 7);
+                            else if (op3 == 6) {
+                                int modo;
+                                cout << "\n Deseas reproducir en orden (1) o aleatorio (2)? ";
+                                cin >> modo;
+                                reproducirFavoritos(up, modo == 2);
+                            }
+                            else if(op3 == 7) usuarios[i]->mostrarDatos();
+                        } while (op3 != 8);
                     }
                     break;
                 }
