@@ -212,6 +212,13 @@ public:
         cout << "\n Lista de Favoritos" << endl;
         for (int i = 0; i < total; ++i) cout << i + 1 << ". " << canciones[i]->getNombre() << " (id: " << canciones[i]->getId() << ")" << endl;
     }
+    Cancion* obtenerCancion(int i) const {
+        if (i >= 0 && i < total) return canciones[i];
+        return nullptr;
+    }
+
+    int getTotal() const { return total; }
+
 };
 // CLASE USUARIO PREMIUM:
 class UsuarioPremium : public Usuario {
@@ -291,7 +298,12 @@ public:
                 if (!repetir) currentPos = rand() % totalC;
             } else {
                 int control = 0;
-                cout << "\n--- Controles (Premium) ---\n1. Pausar\n2. Siguiente\n3. Anterior\n4. Alternar Repetir\n5. Detener\nSeleccione: ";
+                cout << "\n--- Controles (Premium) ---"
+                        "\n1. Pausar"
+                        "\n2. Siguiente"
+                        "\n3. Anterior\n4. Alternar-Repetir"
+                        "\n5. Detener"
+                        "\nSeleccione: ";
                 cin >> control;
                 iteraciones++;
                 if (control == 1) {
@@ -312,6 +324,67 @@ public:
              << "\nMemoria usada: " << (sizeof(*this) + totalC * sizeof(Cancion*) + totalP * sizeof(Publicidad*)) << " bytes\n";
     }
 };
+
+// REPRODUCIR FAVORITOS:
+void reproducirFavoritos(UsuarioPremium* up, bool aleatorio) {
+    ListaFavoritos& lista = up->getFavoritos();
+    int total = lista.getTotal();
+
+    if (total == 0) {
+        cout << "Tu lista de favoritos está vacía.\n";
+        return;
+    }
+
+    int indices[MAX_FAVORITES];
+    for (int i = 0; i < total; ++i) indices[i] = i;
+    if (aleatorio) {
+        for (int i = 0; i < total; ++i)
+            swap(indices[i], indices[rand() % total]);
+    }
+
+    int actual = 0, reproducidas = 0;
+    bool repetir = false;
+    int historial[M_PREVIOUS], histCount = 0;
+    int iteraciones = 0;
+
+    while (reproducidas < K_AUTOPLAY && actual < total) {
+        Cancion* c = lista.obtenerCancion(indices[actual]);
+        if (c == nullptr) break;
+        c->mostrar(320);
+        iteraciones++;
+
+        cout << "\n--- Controles (Favoritos) ---"
+             << "\n1. Siguiente"
+             << "\n2. Anterior"
+             << "\n3. Alternar Repetir"
+             << "\n4. Detener"
+             << "\nSeleccione: ";
+
+        int control;
+        cin >> control;
+        iteraciones++;
+
+        if (control == 1 && !repetir) {
+            if (actual < total - 1) actual++;
+            if (histCount < M_PREVIOUS) historial[histCount++] = actual;
+            reproducidas++;
+        } else if (control == 2 && histCount > 0) {
+            actual = historial[--histCount];
+        } else if (control == 3) {
+            repetir = !repetir;
+            cout << (repetir ? "Repetir activado.\n" : "Repetir desactivado.\n");
+        } else if (control == 4) break;
+        else {
+            cout << "Opción inválida.\n";
+        }
+    }
+
+    cout << "\n--- Métricas ---"
+         << "\nIteraciones: " << iteraciones
+         << "\nMemoria usada: " << (sizeof(ListaFavoritos) + total * sizeof(Cancion*)) << " bytes\n";
+}
+
+
 // FUNCIONES ARCHIVO "usuario.txt":
 void guardarUsuarioArchivo(Usuario* u) {
     ofstream archivo("usuarios.txt", ios::app);
@@ -393,7 +466,7 @@ int main() {
     r.agregarCancion(&c4);
 
     // PUBLICIDAD:
-    r.agregarPublicidad(new Publicidad("Compra el nuevo álbum de DJ UdeA!", "AAA"));
+    r.agregarPublicidad(new Publicidad("Compra el nuevo album de DJ UdeA!", "AAA"));
     r.agregarPublicidad(new Publicidad("Hazte Premium y evita anuncios.", "B"));
     r.agregarPublicidad(new Publicidad("Descubre nuevos artistas cada semana.", "C"));
 
