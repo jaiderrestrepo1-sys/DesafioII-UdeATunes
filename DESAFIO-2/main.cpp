@@ -431,13 +431,13 @@ int main() {
                "/users/storage/blessd/image/blessdeluxury.png", "2025-10-01", 2);
 
     Cancion c1("Yogurcito", "300030301", 180,
-               "/users/storage/audio/yogurcito_128.ogg", "/users/storage/audio/yogurcito_320.ogg", a1, alb1);
+               "/users/storage/audio/blessd/yogurcito_128.ogg", "/users/storage/blessd/audio/yogurcito_320.ogg", a1, alb1);
     c1.agregarCredito(Credito("Pedro", "Gonzalez", "PROD9012345", "Productor"));
     c1.agregarCredito(Credito("Ana", "Martinez", "MUS5678901", "Musico"));
     c1.agregarCredito(Credito("Carlos", "Ramirez", "COMP2345678", "Compositor"));
 
     Cancion c2("Magia", "300030302", 200,
-               "/users/storage/audio/magia_128.ogg", "/users/storage/audio/magia_320.ogg", a1, alb1);
+               "/users/storage/juanes/audio/magia_128.ogg", "/users/storage/juanes/audio/magia_320.ogg", a1, alb1);
     c2.agregarCredito(Credito("Lucia", "Diaz", "PROD3456789", "Productora"));
     c2.agregarCredito(Credito("Javier", "Soto", "MUS6789012", "Musico"));
     c2.agregarCredito(Credito("Marina", "Vargas", "COMP3456789", "Compositor"));
